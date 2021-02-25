@@ -29,6 +29,8 @@ class CalculatorViewModel: CalculatorViewModelProtocol,
                            ObservableObject {
     
     @Published var display: String = "0"
+    @Published var buttonText: String  = "AC"
+    
 
     private var operation: Calculation = Calculation(firstOperator: 0,
                                                      secondOperator: 0,
@@ -38,10 +40,12 @@ class CalculatorViewModel: CalculatorViewModelProtocol,
     public func addDigit(_ digit: String) {
         if self.operation.operation != .none && self.operation.secondOperator == nil {
             self.operation.secondOperator = 0
+            self.buttonText = "C"
             self.display = digit
             return
         }
         guard self.display != "0" else {
+            self.buttonText = "C"
             self.display = digit
             return
         }
@@ -51,10 +55,13 @@ class CalculatorViewModel: CalculatorViewModelProtocol,
         }
         
         self.display += digit
+        self.buttonText = "C"
     }
     
     public func resetOperands() {
         self.operation.reset()
+        if self.display == "0" { self.buttonText = "AC" }
+        else { self.buttonText = "C" }
         self.display = "0"
     }
     
@@ -78,6 +85,7 @@ class CalculatorViewModel: CalculatorViewModelProtocol,
         }
         
         self.display = "0"
+        self.buttonText = "C"
     }
     
     func calculateResult(for values: Calculation) -> Int? {
