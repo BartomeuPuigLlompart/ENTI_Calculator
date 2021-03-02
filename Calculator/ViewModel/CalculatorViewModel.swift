@@ -33,7 +33,7 @@ class CalculatorViewModel: CalculatorViewModelProtocol,
     
 
     private var operation: Calculation = Calculation(firstOperator: 0,
-                                                     secondOperator: 0,
+                                                     secondOperator: nil,
                                                      operation: .none)
     private var operationFinished: Bool = false
     
@@ -59,9 +59,18 @@ class CalculatorViewModel: CalculatorViewModelProtocol,
     }
     
     public func resetOperands() {
-        self.operation.reset()
-        if self.display == "0" { self.buttonText = "AC" }
-        else { self.buttonText = "C" }
+        
+        if self.display == "0"
+        {
+            self.buttonText = "AC"
+            self.operation.reset()
+            
+        }
+        else
+        {
+            self.buttonText = "C"
+            self.operation.secondOperator = 0
+        }
         self.display = "0"
     }
     
@@ -82,10 +91,10 @@ class CalculatorViewModel: CalculatorViewModelProtocol,
         default:
             self.operation.firstOperator = value
             self.operation.operation = operation
+            self.buttonText = "C"
         }
         
-        self.display = "0"
-        self.buttonText = "C"
+            
     }
     
     func calculateResult(for values: Calculation) -> Int? {
